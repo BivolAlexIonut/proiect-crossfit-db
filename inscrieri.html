@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Înscrieri</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Panou de Control CrossFit</h1>
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a>
+    <a href="/orar">Orar Săptămânal</a>
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Înscrie un Membru la o Clasă</h2>
+<form id="form-add-inscriere">
+    <div>
+        <label for="select-membru">Membru:</label>
+        <select id="select-membru" required>
+            <option value="">Alege un membru...</option>
+        </select>
+    </div>
+    <div>
+        <label for="select-clasa">Clasă (WOD @ Data):</label>
+        <select id="select-clasa" required>
+            <option value="">Alege o clasă...</option>
+        </select>
+    </div>
+    <button type="submit">Înscrie Membru</button>
+</form>
+
+<h2>Listă Înscrieri</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Nume Membru</th>
+        <th>Clasă (WOD)</th>
+        <th>Data și Ora</th>
+        <th>Antrenor</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-inscrieri">
+    <tr><td colspan="5">Se încarcă înscrierile...</td></tr>
+    </tbody>
+</table>
+
+<script src="/inscrieri.js" defer></script>
+
+</body>
+</html>

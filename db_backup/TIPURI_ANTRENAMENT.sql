@@ -1,0 +1,5 @@
+INSERT INTO CROSSFIT_ADMIN.TIPURI_ANTRENAMENT (TIPANTRENAMENTID, NUMEWOD, DESCRIERE) VALUES (407, 'Mobilitate', 'Clasă de recuperare și flexibilitate. Se concentrează pe îmbunătățirea razei de mișcare a articulațiilor și pe stretching.');
+INSERT INTO CROSSFIT_ADMIN.TIPURI_ANTRENAMENT (TIPANTRENAMENTID, NUMEWOD, DESCRIERE) VALUES (408, 'Strongman', 'Antrenament de forță funcțională neconvențională. Folosește obiecte precum anvelope, "atlas stones", "log lifts".');
+INSERT INTO CROSSFIT_ADMIN.TIPURI_ANTRENAMENT (TIPANTRENAMENTID, NUMEWOD, DESCRIERE) VALUES (403, 'Haltere', 'Antrenament axat pe mișcările olimpice: Smuls (Snatch) și Aruncat (Clean & Jerk).');
+INSERT INTO CROSSFIT_ADMIN.TIPURI_ANTRENAMENT (TIPANTRENAMENTID, NUMEWOD, DESCRIERE) VALUES (404, 'Gimnastică', 'Antrenament axat pe controlul greutății corpului (ex: tracțiuni, flotări, stat în mâini).');
+INSERT INTO CROSSFIT_ADMIN.TIPURI_ANTRENAMENT (TIPANTRENAMENTID, NUMEWOD, DESCRIERE) VALUES (405, 'Metcon', 'Antrenament metabolic (Cardio) axat pe rezistență și viteză.');

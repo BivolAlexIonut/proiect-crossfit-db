@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Categorii</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Panou de Control CrossFit</h1>
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a>
+    <a href="/orar">Orar Săptămânal</a>
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+<h2>Adaugă Categorie Nouă</h2>
+<form id="form-add-tip">
+    <div>
+        <label for="nume-tip">Nume Categorie (ex: Haltere, Metcon):</label>
+        <input type="text" id="nume-tip" required>
+    </div>
+    <div>
+        <label for="descriere-tip">Descriere:</label>
+        <textarea id="descriere-tip" rows="4"></textarea>
+    </div>
+    <button type="submit">Adaugă Categorie</button>
+</form>
+
+<h2>Categorii Definite</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nume Categorie</th>
+        <th>Descriere</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-tipuri">
+    <tr><td colspan="4">Se încarcă categoriile...</td></tr>
+    </tbody>
+</table> <script src="/tipuri-antrenament.js" defer></script>
+</body>
+</html>

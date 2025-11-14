@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Antrenori</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<h1>Panou de Control CrossFit</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a>
+    <a href="/orar">Orar Săptămânal</a>
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Adaugă Antrenor Nou</h2>
+<form id="form-add-antrenor">
+    <div>
+        <label for="nume-antrenor">Nume:</label>
+        <input type="text" id="nume-antrenor" required>
+    </div>
+    <div>
+        <label for="prenume-antrenor">Prenume:</label>
+        <input type="text" id="prenume-antrenor" required>
+    </div>
+    <div>
+        <label for="specializare-antrenor">Specializare:</label>
+        <input type="text" id="specializare-antrenor" required>
+    </div>
+    <button type="submit">Adaugă Antrenor</button>
+</form>
+
+<h2>Antrenori Activi</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID Antrenor</th>
+        <th>Nume</th>
+        <th>Prenume</th>
+        <th>Specializare</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-antrenori">
+    <tr><td colspan="5">Se încarcă antrenorii...</td></tr>
+    </tbody>
+</table>
+
+<script src="/antrenori.js" defer></script>
+
+</body>
+</html>
