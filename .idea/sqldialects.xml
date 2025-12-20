@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/db_backup/ABONAMENTE.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/ACHIZITII.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/ANTRENORI.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/CLASE.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/ECHIPAMENTE.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/INSCRIERI.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/MEMBRI.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/MENTORAT.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/NECESAR_ECHIPAMENT.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/ORAR_TEMPLATE.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/PRODUSE.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/TIPURI_ANTRENAMENT.sql" dialect="Oracle" />
+    <file url="file://$PROJECT_DIR$/db_backup/structura.sql" dialect="Oracle" />
+  </component>
+</project>
