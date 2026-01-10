@@ -1,0 +1,37 @@
+INSTRUCȚIUNI PENTRU ACTUALIZAREA PROIECTULUI
+==============================================
+
+Pentru a alinia baza de date cu noile cerințe implementate (Vizualizări Complexe), vă rugăm să rulați următorul script SQL în baza de date Oracle (folosind DataGrip, SQL Developer sau SQLPlus):
+
+1. Crearea Vizualizării Complexe (necesară pentru Raportul de Popularitate):
+
+   CREATE OR REPLACE VIEW V_RAPORT_POPULARITATE AS
+   SELECT
+       a.TipAbonament,
+       COUNT(m.MembruID) AS Numar_Membri
+   FROM
+       ABONAMENTE a
+           JOIN
+       MEMBRI m ON a.AbonamentID = m.AbonamentID
+   GROUP BY
+       a.TipAbonament
+   HAVING
+       COUNT(m.MembruID) > 2;
+   /
+
+----------------------------------------------
+MODIFICĂRI REALIZATE ÎN COD:
+
+1. Interfață (Frontend):
+   - Adăugat SORTARE (click pe capul de tabel) pentru paginile "Membri" și "Abonamente".
+   - Adăugat AVERTISMENT detaliat la ștergerea unui membru (explică ștergerea în cascadă).
+   - Adăugat buton de EDITARE EMAIL direct în tabelul de rapoarte (demonstrează DML pe o vizualizare compusă).
+
+2. Backend (Go):
+   - Modificat `handlerRaportAbonamente` pentru a citi din vizualizarea complexă `V_RAPORT_POPULARITATE` (Cerința III.d/f).
+   - Adăugat `handlerUpdateView` pentru a permite modificarea email-ului prin vizualizarea `V_MEMBRI_ABONAMENTE` (Cerința III.f - DML pe vizualizare compusă).
+
+3. Baza de Date:
+   - Definiția vizualizării a fost adăugată și în `db_backup/structura.sql`.
+
+Succes!

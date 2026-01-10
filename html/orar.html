@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Orar Săptămânal</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Panou de Control CrossFit</h1>
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Adaugă / Modifică Regulă Orar</h2>
+<form id="form-add-orar">
+    <div>
+        <label for="select-zi">Ziua Săptămânii:</label>
+        <select id="select-zi" required>
+            <option value="">Alege o zi...</option>
+            <option value="1">Luni</option>
+            <option value="2">Marți</option>
+            <option value="3">Miercuri</option>
+            <option value="4">Joi</option>
+            <option value="5">Vineri</option>
+            <option value="6">Sâmbătă</option>
+            <option value="7">Duminică</option>
+        </select>
+    </div>
+    <div>
+        <label for="ora">Ora (Format HH:MM, ex: 09:00 sau 18:30):</label>
+        <input type="text" id="ora" pattern="[0-2][0-9]:[0-5][0-9]" placeholder="HH:MM" required>
+    </div>
+    <div>
+        <label for="nume-wod-template">Nume Standard (ex: "WOD-ul Zilei", "Haltere Avansați"):</label>
+        <input type="text" id="nume-wod-template" required>
+    </div>
+    <div>
+        <label for="select-antrenor-orar">Antrenor:</label>
+        <select id="select-antrenor-orar" required>
+            <option value="">Alege un antrenor...</option>
+        </select>
+    </div>
+    <div>
+        <label for="select-categorie-orar">Categorie Antrenament:</label>
+        <select id="select-categorie-orar" required>
+            <option value="">Alege o categorie...</option>
+        </select>
+    </div>
+    <button type="submit">Adaugă Regulă</button>
+</form>
+
+<div class="generator-container">
+    <h2>Generator Orar</h2>
+    <p>Apasă butonul de mai jos pentru a genera automat toate clasele concrete pentru săptămâna viitoare,
+        bazat pe regulile definite în orarul săptămânal.</p>
+    <button id="btn-generate-orar" class="btn-submit-green">Generează Săptămâna Viitoare</button>
+    <div id="generate-status" class="generate-status"></div>
+</div>
+
+<h2>Orar Săptămânal Definit</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ziua Săptămânii</th>
+        <th>Ora</th>
+        <th>Nume Standard</th>
+        <th>Antrenor</th>
+        <th>Categorie</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-orar">
+    <tr><td colspan="7">Se încarcă orarul...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/orar.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestiune Mentorat</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Gestiune Mentorat</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Asignează Mentor</h2>
+<form id="form-add-mentorat">
+    <div>
+        <label for="select-antrenor">Antrenor (Mentor):</label>
+        <select id="select-antrenor" required>
+            <option value="">Alege antrenorul...</option>
+        </select>
+    </div>
+    <div>
+        <label for="select-membru">Membru:</label>
+        <select id="select-membru" required>
+            <option value="">Alege membrul...</option>
+        </select>
+    </div>
+    <button type="submit">Creează Legătură</button>
+</form>
+
+<h2>Relații Mentorat Existente</h2>
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortMentorat('numeAntrenor')" style="cursor: pointer;">Antrenor &#x2195;</th>
+        <th onclick="sortMentorat('numeMembru')" style="cursor: pointer;">Membru &#x2195;</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-mentorat">
+    <tr><td colspan="3">Se încarcă...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/mentorat.js" defer></script>
+
+</body>
+</html>

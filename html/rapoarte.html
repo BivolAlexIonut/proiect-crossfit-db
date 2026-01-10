@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapoarte Sală</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Panou de Control CrossFit</h1>
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Raport: Popularitate Abonamente</h2>
+<p>Afișează doar tipurile de abonamente care au fost cumpărate de mai mult de 2 membri.</p>
+<table>
+    <thead>
+    <tr>
+        <th>Tip Abonament</th>
+        <th>Număr Membri</th>
+    </tr>
+    </thead>
+    <tbody id="raport-abonamente">
+    <tr><td colspan="2">Se generează raportul...</td></tr>
+    </tbody>
+</table>
+
+<h2>Raport: Membri și Abonamentele Lor (din Vizualizare)</h2>
+<p>Afișează membrii și abonamentele lor, folosind vizualizarea <code>V_MEMBRI_ABONAMENTE</code>.</p>
+<table>
+    <thead>
+    <tr>
+        <th>Nume</th>
+        <th>Prenume</th>
+        <th>Email</th>
+        <th>Tip Abonament</th>
+        <th>Preț</th>
+    </tr>
+    </thead>
+    <tbody id="raport-vizualizare">
+    <tr><td colspan="5">Se generează raportul...</td></tr>
+    </tbody>
+</table>
+
+<h2>Raport: Înscrieri la Clasele unui Antrenor Specific</h2>
+<p>Afișează membrii care au abonament 'Nelimitat 1 Luna' și sunt înscriși la clasele lui 'Popescu'.</p>
+<table>
+    <thead>
+    <tr>
+        <th>Nume Membru</th>
+        <th>Prenume Membru</th>
+        <th>Nume Clasă</th>
+        <th>Nume Antrenor</th>
+    </tr>
+    </thead>
+    <tbody id="raport-complex">
+    <tr><td colspan="4">Se generează raportul...</td></tr>
+    </tbody>
+</table>
+
+
+<script src="/js/rapoarte.js" defer></script>
+
+</body>
+</html>

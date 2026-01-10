@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Clase</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Panou de Control CrossFit</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Adaugă / Modifică Clasă</h2>
+<form id="form-add-clasa">
+    <div>
+        <label for="nume-wod">Nume WOD (ex: "WOD-ul Zilei", "5x5 Back Squat"):</label>
+        <input type="text" id="nume-wod" required>
+    </div>
+    <div>
+        <label for="descriere-wod">Descriere WOD (ex: "5 runde de...")</label>
+        <textarea id="descriere-wod" rows="4"></textarea>
+    </div>
+    <div>
+        <label for="data-ora">Data și Ora:</label>
+        <input type="datetime-local" id="data-ora" required>
+    </div>
+    <div>
+        <label for="select-antrenor">Antrenor:</label>
+        <select id="select-antrenor" required>
+            <option value="">Alege un antrenor...</option>
+        </select>
+    </div>
+    <div>
+        <label for="select-categorie">Categorie Antrenament:</label>
+        <select id="select-categorie" required>
+            <option value="">Alege o categorie...</option>
+        </select>
+    </div>
+    <button type="submit">Adaugă Clasă</button>
+</form>
+
+<h2>Orar Clase Programate</h2>
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortClase('id')" style="cursor: pointer;">ID Clasă &#x2195;</th>
+        <th onclick="sortClase('numeWOD')" style="cursor: pointer;">Nume WOD &#x2195;</th>
+        <th>Descriere</th>
+        <th onclick="sortClase('dataOra')" style="cursor: pointer;">Data și Ora &#x2195;</th>
+        <th onclick="sortClase('numeAntrenor')" style="cursor: pointer;">Antrenor &#x2195;</th>
+        <th onclick="sortClase('numeCategorie')" style="cursor: pointer;">Categorie &#x2195;</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-clase">
+    <tr><td colspan="7">Se încarcă clasele...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/clase.js" defer></script>
+
+</body>
+</html>

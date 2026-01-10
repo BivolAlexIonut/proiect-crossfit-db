@@ -162,45 +162,45 @@ func main() {
 	fmt.Println("Conexiune la baza de date reușită!")
 
 	// --- Rute Fișiere (Frontend) ---
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "index.html") })
-	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "style.css") })
-	http.HandleFunc("/script.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "script.js") })
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/index.html") })
+	http.HandleFunc("/css/style.css", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "css/style.css") })
+	http.HandleFunc("/js/script.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/script.js") })
 
-	http.HandleFunc("/antrenori", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "antrenori.html") })
-	http.HandleFunc("/antrenori.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "antrenori.js") })
+	http.HandleFunc("/antrenori", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/antrenori.html") })
+	http.HandleFunc("/js/antrenori.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/antrenori.js") })
 
-	http.HandleFunc("/abonamente", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "abonamente.html") })
-	http.HandleFunc("/abonamente.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "abonamente.js") })
+	http.HandleFunc("/abonamente", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/abonamente.html") })
+	http.HandleFunc("/js/abonamente.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/abonamente.js") })
 
-	http.HandleFunc("/produse", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "produse.html") })
-	http.HandleFunc("/produse.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "produse.js") })
+	http.HandleFunc("/produse", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/produse.html") })
+	http.HandleFunc("/js/produse.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/produse.js") })
 
-	http.HandleFunc("/echipamente", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "echipamente.html") })
-	http.HandleFunc("/echipamente.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "echipamente.js") })
+	http.HandleFunc("/echipamente", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/echipamente.html") })
+	http.HandleFunc("/js/echipamente.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/echipamente.js") })
 
-	http.HandleFunc("/tipuri-antrenament", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "tipuri-antrenament.html") })
-	http.HandleFunc("/tipuri-antrenament.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "tipuri-antrenament.js") })
+	http.HandleFunc("/tipuri-antrenament", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/tipuri-antrenament.html") })
+	http.HandleFunc("/js/tipuri-antrenament.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/tipuri-antrenament.js") })
 
-	http.HandleFunc("/clase", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "clase.html") })
-	http.HandleFunc("/clase.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "clase.js") })
+	http.HandleFunc("/clase", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/clase.html") })
+	http.HandleFunc("/js/clase.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/clase.js") })
 
-	http.HandleFunc("/inscrieri", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "inscrieri.html") })
-	http.HandleFunc("/inscrieri.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "inscrieri.js") })
+	http.HandleFunc("/inscrieri", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/inscrieri.html") })
+	http.HandleFunc("/js/inscrieri.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/inscrieri.js") })
 
-	http.HandleFunc("/orar", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "orar.html") })
-	http.HandleFunc("/orar.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "orar.js") })
+	http.HandleFunc("/orar", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/orar.html") })
+	http.HandleFunc("/js/orar.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/orar.js") })
 
-	http.HandleFunc("/achizitii", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "achizitii.html") })
-	http.HandleFunc("/achizitii.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "achizitii.js") })
+	http.HandleFunc("/achizitii", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/achizitii.html") })
+	http.HandleFunc("/js/achizitii.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/achizitii.js") })
 
-	http.HandleFunc("/mentorat", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "mentorat.html") })
-	http.HandleFunc("/mentorat.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "mentorat.js") })
+	http.HandleFunc("/mentorat", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/mentorat.html") })
+	http.HandleFunc("/js/mentorat.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/mentorat.js") })
 
-	http.HandleFunc("/competitii", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "competitii.html") })
-	http.HandleFunc("/competitii.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "competitii.js") })
+	http.HandleFunc("/competitii", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/competitii.html") })
+	http.HandleFunc("/js/competitii.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/competitii.js") })
 
-	http.HandleFunc("/rapoarte", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "rapoarte.html") })
-	http.HandleFunc("/rapoarte.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "rapoarte.js") })
+	http.HandleFunc("/rapoarte", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "html/rapoarte.html") })
+	http.HandleFunc("/js/rapoarte.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "js/rapoarte.js") })
 
 	// --- Rute API (Backend) ---
 	http.HandleFunc("/api/membri", handlerGetMembri)
@@ -274,6 +274,7 @@ func main() {
 	http.HandleFunc("/api/raport/abonamente", handlerRaportAbonamente)
 	http.HandleFunc("/api/raport/vizualizare-membri", handlerRaportVizualizare)
 	http.HandleFunc("/api/raport/complex-inscrieri", handlerRaportComplex)
+	http.HandleFunc("/api/raport/update-view", handlerUpdateView)
 
 	// --- Pornirea Serverului ---
 	port := ":8080"
@@ -1945,19 +1946,7 @@ func handlerGenerateOrar(w http.ResponseWriter, r *http.Request) {
 // HANDLERE PENTRU RAPOARTE
 // ===================================================================
 func handlerRaportAbonamente(w http.ResponseWriter, _ *http.Request) {
-	query := `
-		SELECT
-			a.TipAbonament,
-			COUNT(m.MembruID) AS Numar_Membri
-		FROM
-			ABONAMENTE a
-		JOIN
-			MEMBRI m ON a.AbonamentID = m.AbonamentID
-		GROUP BY
-			a.TipAbonament
-		HAVING
-			COUNT(m.MembruID) > 2
-	`
+	query := `SELECT TipAbonament, Numar_Membri FROM V_RAPORT_POPULARITATE`
 	rows, err := db.Query(query)
 	if err != nil {
 		http.Error(w, "Eroare BD", http.StatusInternalServerError)
@@ -2063,4 +2052,39 @@ func handlerRaportComplex(w http.ResponseWriter, _ *http.Request) {
 	if err := json.NewEncoder(w).Encode(raport); err != nil {
 		log.Println("Eroare la encodare JSON raport complex:", err)
 	}
+}
+
+func handlerUpdateView(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
+		return
+	}
+	var payload struct {
+		OldEmail string `json:"oldEmail"`
+		NewEmail string `json:"newEmail"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "JSON invalid", http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+
+	// UPDATE pe VIEW-ul COMPUS (V_MEMBRI_ABONAMENTE)
+	// Oracle permite update pe tabela "key-preserved" (Membri) prin view.
+	query := "UPDATE V_MEMBRI_ABONAMENTE SET Email = :1 WHERE Email = :2"
+
+	result, err := db.Exec(query, payload.NewEmail, payload.OldEmail)
+	if err != nil {
+		http.Error(w, "Eroare la actualizarea prin VIEW (posibil restricții BD)", http.StatusInternalServerError)
+		log.Println("Eroare Update View:", err)
+		return
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"mesaj":        "Email actualizat cu succes prin VIEW!",
+		"rowsAffected": rowsAffected,
+	})
 }

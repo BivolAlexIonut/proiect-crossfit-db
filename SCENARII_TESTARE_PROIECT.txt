@@ -1,0 +1,74 @@
+============================================================
+SCENARII DE TESTARE PENTRU PROIECTUL BD - CROSSFIT
+============================================================
+
+Urmează acești pași pentru a demonstra funcționalitatea completă a proiectului conform cerințelor Capitolului III.
+
+------------------------------------------------------------
+1. LISTARE ȘI SORTARE (Cerința III.a)
+------------------------------------------------------------
+- PAGINI: Membri, Antrenori, Produse, Clase, Abonamente etc.
+- TEST: Intră pe pagina "Membri". Dă click pe antetul coloanei "Nume". 
+- REZULTAT: Tabelul se sortează alfabetic. Dă click din nou, se sortează invers.
+- SCOP: Demonstrează sortarea dinamică pentru toate tabelele.
+
+------------------------------------------------------------
+2. MODIFICARE ȘI ȘTERGERE (Cerința III.b)
+------------------------------------------------------------
+- PAGINA: Antrenori (sau oricare alta).
+- TEST EDIT: Apasă butonul "Editează" la un antrenor. Modifică-i Prenumele în formular și apasă "Salvează Modificările".
+- REZULTAT: Datele se actualizează în tabel.
+- TEST DELETE: Apasă butonul "Șterge" la un antrenor. Confirmă acțiunea.
+- REZULTAT: Înregistrarea dispare din tabel și din baza de date Oracle.
+
+------------------------------------------------------------
+3. INTEROGARE COMPLEXĂ - JOIN 5 TABELE (Cerința III.c)
+------------------------------------------------------------
+- PAGINA: Rapoarte.
+- TEST: Consultă ultimul tabel: "Raport: Înscrieri la Clasele unui Antrenor Specific".
+- SQL DIN SPATE: Realizează JOIN între MEMBRI, ABONAMENTE, INSCRIERI, CLASE și ANTRENORI.
+- CONDIȚII: Filtrează membrii cu abonament 'Nelimitat 1 Luna' care au cursuri cu antrenorul 'Popescu'.
+- REZULTAT: Afișează o listă filtrată de rezultate extrase din multiple tabele.
+
+------------------------------------------------------------
+4. FUNCȚII GRUP ȘI CLAUZA HAVING (Cerința III.d)
+------------------------------------------------------------
+- PAGINA: Rapoarte.
+- TEST: Consultă primul tabel: "Raport: Popularitate Abonamente".
+- SQL DIN SPATE: Folosește COUNT(MembruID) și GROUP BY TipAbonament.
+- REZULTAT: Afișează doar abonamentele care au fost cumpărate de MAI MULT de 2 membri (clauza HAVING).
+
+------------------------------------------------------------
+5. CONSTRÂNGERE ON DELETE CASCADE (Cerința III.e)
+------------------------------------------------------------
+- TEST CRITIC:
+  1. Creează un membru nou (ex: "Mihai Cascade").
+  2. Mergi la "Achiziții" și adaugă o achiziție pentru el.
+  3. Mergi la "Înscrieri" și înscrie-l la o clasă.
+  4. Mergi la "Membri" și ȘTERGE-L pe "Mihai Cascade".
+- REZULTAT: Membrul este șters. 
+- VERIFICARE: Mergi la "Achiziții" și "Înscrieri". Vei observa că înregistrările lui au dispărut AUTOMAT.
+- EXPLICAȚIE: S-a declanșat regula ON DELETE CASCADE definită în SQL.
+
+------------------------------------------------------------
+6. UTILIZAREA VIZUALIZĂRILOR (Cerința III.f)
+------------------------------------------------------------
+- PAGINA: Rapoarte.
+- TEST VIZUALIZARE COMPUSĂ + LMD: 
+  1. Tabelul "Membri și Abonamente" folosește view-ul V_MEMBRI_ABONAMENTE.
+  2. Apasă pe iconița Creion (✏️) de lângă email-ul unui membru.
+  3. Introdu o adresă de email nouă și confirmă.
+- REZULTAT: Email-ul este actualizat în tabelul principal de Membri.
+- SCOP: Demonstrează efectuarea unei operații de actualizare (UPDATE) printr-o vizualizare compusă.
+
+------------------------------------------------------------
+7. INTEGRITATEA DATELOR (CURS)
+------------------------------------------------------------
+- TEST 1 (Check Constraint): Încearcă să pui un preț negativ la un Abonament sau Produs. HTML-ul și Baza de Date vor respinge valoarea.
+- TEST 2 (Listă fixă): La Antrenori, nu mai poți scrie orice la Specializare, trebuie să alegi din lista securizată (Gimnastică, Haltere etc.).
+- TEST 3 (Email): Încearcă să introduci un email fără simbolul "@". Baza de date va returna eroare (CHK_MEMBRU_EMAIL).
+
+============================================================
+SFAT: Fă capturi de ecran (PrintScreen) la fiecare rezultat 
+pozitiv pentru a le pune în prezentarea proiectului!
+============================================================

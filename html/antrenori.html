@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Antrenori</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Panou de Control CrossFit</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Adaugă Antrenor Nou</h2>
+<form id="form-add-antrenor">
+    <div>
+        <label for="nume-antrenor">Nume:</label>
+        <input type="text" id="nume-antrenor" required>
+    </div>
+    <div>
+        <label for="prenume-antrenor">Prenume:</label>
+        <input type="text" id="prenume-antrenor" required>
+    </div>
+    <div>
+        <label for="specializare-antrenor">Specializare:</label>
+        <select id="specializare-antrenor" required>
+            <option value="">Alege specializarea...</option>
+            <option value="Gimnastica">Gimnastică</option>
+            <option value="Haltere">Haltere</option>
+            <option value="Crossfit L1">Crossfit L1</option>
+            <option value="Crossfit L2">Crossfit L2</option>
+            <option value="Mobilitate">Mobilitate</option>
+            <option value="Cardio">Cardio</option>
+        </select>
+    </div>
+    <button type="submit">Adaugă Antrenor</button>
+</form>
+
+<h2>Antrenori Activi</h2>
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortAntrenori('id')" style="cursor: pointer;">ID Antrenor &#x2195;</th>
+        <th onclick="sortAntrenori('nume')" style="cursor: pointer;">Nume &#x2195;</th>
+        <th onclick="sortAntrenori('prenume')" style="cursor: pointer;">Prenume &#x2195;</th>
+        <th onclick="sortAntrenori('specializare')" style="cursor: pointer;">Specializare &#x2195;</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-antrenori">
+    <tr><td colspan="5">Se încarcă antrenorii...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/antrenori.js" defer></script>
+
+</body>
+</html>

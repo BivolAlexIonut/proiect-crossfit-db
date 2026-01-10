@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Membri</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Panou de Control CrossFit</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+<h2>Adaugă Membru Nou</h2>
+<form id="form-add-membru">
+    <div>
+        <label for="nume">Nume:</label>
+        <input type="text" id="nume" required>
+    </div>
+    <div>
+        <label for="prenume">Prenume:</label>
+        <input type="text" id="prenume" required>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+    </div>
+    <div>
+        <label for="select-abonament">Abonament:</label>
+        <select id="select-abonament" required>
+            <option value="">Alege un abonament...</option>
+        </select>
+    </div>
+    <button type="submit">Adaugă Membru</button>
+</form>
+
+<h2>Membri Activi</h2>
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortMembri('id')" style="cursor: pointer;">ID Membru &#x2195;</th>
+        <th onclick="sortMembri('nume')" style="cursor: pointer;">Nume &#x2195;</th>
+        <th onclick="sortMembri('prenume')" style="cursor: pointer;">Prenume &#x2195;</th>
+        <th onclick="sortMembri('email')" style="cursor: pointer;">Email &#x2195;</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-membri">
+    <tr><td colspan="4">Se încarcă membrii...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/script.js" defer></script>
+
+</body>
+</html>

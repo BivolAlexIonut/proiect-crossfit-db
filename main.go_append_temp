@@ -1,0 +1,34 @@
+func handlerUpdateView(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
+		return
+	}
+	var payload struct {
+		OldEmail string `json:"oldEmail"`
+		NewEmail string `json:"newEmail"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "JSON invalid", http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+
+	// UPDATE pe VIEW-ul COMPUS (V_MEMBRI_ABONAMENTE)
+	// Oracle permite update pe tabela "key-preserved" (Membri) prin view.
+	query := `UPDATE V_MEMBRI_ABONAMENTE SET Email = :1 WHERE Email = :2`
+	
+	result, err := db.Exec(query, payload.NewEmail, payload.OldEmail)
+	if err != nil {
+		http.Error(w, "Eroare la actualizarea prin VIEW (posibil restricții DB)", http.StatusInternalServerError)
+		log.Println("Eroare Update View:", err)
+		return
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"mesaj":        "Email actualizat cu succes prin VIEW!",
+		"rowsAffected": rowsAffected,
+	})
+}

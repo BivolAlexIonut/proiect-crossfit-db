@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestiune Achiziții</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Gestiune Achiziții</h1>
+
+<nav>
+    <a href="/">Membri</a> |
+    <a href="/antrenori">Antrenori</a> |
+    <a href="/abonamente">Abonamente</a> |
+    <a href="/produse">Produse</a> |
+    <a href="/echipamente">Echipamente</a> |
+    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+    <a href="/clase">Clase (Orar)</a> |
+    <a href="/inscrieri">Înscrieri</a> |
+    <a href="/orar">Orar Săptămânal</a> |
+    <a href="/achizitii">Achiziții</a> |
+    <a href="/mentorat">Mentorat</a> |
+    <a href="/competitii">Competiții</a> |
+    <a href="/rapoarte">Rapoarte</a>
+</nav>
+
+<h2>Înregistrează Achiziție</h2>
+<form id="form-add-achizitie">
+    <div>
+        <label for="select-membru">Membru:</label>
+        <select id="select-membru" required>
+            <option value="">Alege membrul...</option>
+        </select>
+    </div>
+    <div>
+        <label for="select-produs">Produs:</label>
+        <select id="select-produs" required>
+            <option value="">Alege produsul...</option>
+        </select>
+    </div>
+    <div>
+        <label for="cantitate">Cantitate:</label>
+        <input type="number" id="cantitate" value="1" min="1" required>
+    </div>
+    <button type="submit">Adaugă Achiziție</button>
+</form>
+
+<h2>Istoric Achiziții</h2>
+<table>
+    <thead>
+    <tr>
+        <th onclick="sortAchizitii('id')" style="cursor: pointer;">ID &#x2195;</th>
+        <th onclick="sortAchizitii('numeMembru')" style="cursor: pointer;">Membru &#x2195;</th>
+        <th onclick="sortAchizitii('numeProdus')" style="cursor: pointer;">Produs &#x2195;</th>
+        <th onclick="sortAchizitii('dataAchizitiei')" style="cursor: pointer;">Data &#x2195;</th>
+        <th onclick="sortAchizitii('cantitate')" style="cursor: pointer;">Cantitate &#x2195;</th>
+        <th>Acțiuni</th>
+    </tr>
+    </thead>
+    <tbody id="lista-achizitii">
+    <tr><td colspan="6">Se încarcă achizițiile...</td></tr>
+    </tbody>
+</table>
+
+<script src="/js/achizitii.js" defer></script>
+
+</body>
+</html>
