@@ -27,7 +27,7 @@ function loadAntrenori() {
             antrenoriList = data;
             renderAntrenori();
         })
-        .catch(error => console.error('Eroare la preluarea antrenorilor:', error));
+        .catch(error => alert('Eroare la preluarea antrenorilor: ' + error.message));
 }
 
 function renderAntrenori() {
@@ -99,11 +99,11 @@ function handleFormSubmit(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             resetFormular();
             loadAntrenori();
         })
-        .catch(error => console.error('Eroare formular:', error));
+        .catch(error => alert('Eroare formular: ' + error.message));
 }
 
 function handleEditClick(id) {
@@ -118,7 +118,7 @@ function handleEditClick(id) {
             document.querySelector('#form-add-antrenor button[type="submit"]').textContent = 'Salvează Modificările';
             window.scrollTo(0, 0);
         })
-        .catch(error => console.error('Eroare la preluarea datelor antrenorului:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function handleDelete(id) {
@@ -136,10 +136,10 @@ function handleDelete(id) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             loadAntrenori();
         })
-        .catch(error => console.error('Eroare la ștergere:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function resetFormular() {

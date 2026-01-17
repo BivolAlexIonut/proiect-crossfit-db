@@ -1,3 +1,9 @@
+/**
+ * =============================================================================
+ * SCRIPT MANAGEMENT ACHIZIȚII
+ * =============================================================================
+ */
+
 let achizitiiList = [];
 let sortDirection = 1;
 let lastSortColumn = '';
@@ -7,43 +13,121 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMembriSelect();
     loadProduseSelect();
 
-    document.getElementById("form-add-achizitie").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const membruID = document.getElementById("select-membru").value;
-        const produsID = document.getElementById("select-produs").value;
-        const cantitate = document.getElementById("cantitate").value;
-
-        try {
-            const res = await fetch("/api/achizitii/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    membruID: parseInt(membruID),
-                    produsID: parseInt(produsID),
-                    cantitate: parseInt(cantitate)
-                })
-            });
-            if (!res.ok) throw new Error("Eroare la adăugare");
-            alert("Achiziție înregistrată!");
-            loadAchizitii();
-        } catch (err) {
-            console.error(err);
-            alert("Nu s-a putut adăuga achiziția.");
-        }
-    });
+    document.getElementById("form-add-achizitie").addEventListener("submit", handleAddAchizitie);
 });
+
+// --- LOAD DATA ---
 
 async function loadAchizitii() {
     try {
         const res = await fetch("/api/achizitii");
-        const data = await res.json();
-        achizitiiList = data || [];
+        if (!res.ok) throw new Error("Eroare rețea");
+        achizitiiList = await res.json() || [];
         renderAchizitii();
     } catch (err) {
-        console.error(err);
-        document.getElementById("lista-achizitii").innerHTML = "<tr><td colspan='6'>Eroare la încărcare.</td></tr>";
+        alert("Eroare la încărcarea achizițiilor: " + err.message);
     }
 }
+
+async function loadMembriSelect() {
+    try {
+        const res = await fetch("/api/membri");
+        const data = await res.json() || [];
+        const select = document.getElementById("select-membru");
+        select.innerHTML = '<option value="">Alege membrul...</option>';
+        
+        data.forEach(m => {
+            const opt = document.createElement("option");
+            opt.value = m.id;
+            opt.textContent = `${m.nume} ${m.prenume}`;
+            select.appendChild(opt);
+        });
+    } catch (err) {
+        console.error("Nu s-au putut încărca membrii", err);
+    }
+}
+
+async function loadProduseSelect() {
+    try {
+        const res = await fetch("/api/produse");
+        const data = await res.json() || [];
+        const select = document.getElementById("select-produs");
+        select.innerHTML = '<option value="">Alege produsul...</option>';
+        
+        data.forEach(p => {
+            const opt = document.createElement("option");
+            opt.value = p.id;
+            opt.textContent = `${p.nume} (Stoc: ${p.stoc}, Preț: ${p.pret} RON)`;
+            // Dezactivăm opțiunea dacă nu e stoc, vizual
+            if (p.stoc <= 0) {
+                opt.textContent += " - INDISPONIBIL";
+                opt.disabled = true;
+            }
+            select.appendChild(opt);
+        });
+    } catch (err) {
+        console.error("Nu s-au putut încărca produsele", err);
+    }
+}
+
+// --- ACTIONS ---
+
+async function handleAddAchizitie(e) {
+    e.preventDefault();
+    const membruID = document.getElementById("select-membru").value;
+    const produsID = document.getElementById("select-produs").value;
+    const cantitate = document.getElementById("cantitate").value;
+
+    try {
+        const res = await fetch("/api/achizitii/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                membruID: parseInt(membruID),
+                produsID: parseInt(produsID),
+                cantitate: parseInt(cantitate)
+            })
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(errText);
+        }
+
+        alert("Achiziție înregistrată!");
+        // Reîncărcăm tot pentru a reflecta stocurile noi
+        loadAchizitii();
+        loadProduseSelect();
+        e.target.reset(); // Reset form
+    } catch (err) {
+        alert("Eroare: " + err.message);
+    }
+}
+
+async function deleteAchizitie(id) {
+    if (!confirm("Sigur ștergi această achiziție? Stocul va fi restituit.")) return;
+
+    try {
+        const res = await fetch("/api/achizitii/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: id })
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(errText);
+        }
+
+        alert("Achiziție ștearsă.");
+        loadAchizitii();
+        loadProduseSelect();
+    } catch (err) {
+        alert("Eroare la ștergere: " + err.message);
+    }
+}
+
+// --- RENDER & SORT ---
 
 function renderAchizitii() {
     const tbody = document.getElementById("lista-achizitii");
@@ -55,13 +139,13 @@ function renderAchizitii() {
     achizitiiList.forEach(a => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${a.id}</td>
-            <td>${a.numeMembru}</td>
-            <td>${a.numeProdus}</td>
-            <td>${a.dataAchizitiei}</td>
-            <td>${a.cantitate}</td>
-            <td>
-                <button onclick="deleteAchizitie(${a.id})">Șterge</button>
+            <td data-label="ID">${a.id}</td>
+            <td data-label="Membru">${a.numeMembru}</td>
+            <td data-label="Produs">${a.numeProdus}</td>
+            <td data-label="Data">${a.dataAchizitiei}</td>
+            <td data-label="Cantitate">${a.cantitate}</td>
+            <td data-label="Acțiuni">
+                <button class="btn-delete" onclick="deleteAchizitie(${a.id})">Șterge</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -89,48 +173,4 @@ function sortAchizitii(column) {
     });
 
     renderAchizitii();
-}
-
-async function deleteAchizitie(id) {
-    if (!confirm("Sigur ștergi această achiziție?")) return;
-    try {
-        const res = await fetch("/api/achizitii/delete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: id })
-        });
-        if (!res.ok) throw new Error("Eroare la ștergere");
-        loadAchizitii();
-    } catch (err) {
-        console.error(err);
-        alert("Eroare la ștergere.");
-    }
-}
-
-async function loadMembriSelect() {
-    const select = document.getElementById("select-membru");
-    try {
-        const res = await fetch("/api/membri");
-        const data = await res.json();
-        data.forEach(m => {
-            const opt = document.createElement("option");
-            opt.value = m.id;
-            opt.textContent = `${m.nume} ${m.prenume}`;
-            select.appendChild(opt);
-        });
-    } catch (err) { console.error(err); }
-}
-
-async function loadProduseSelect() {
-    const select = document.getElementById("select-produs");
-    try {
-        const res = await fetch("/api/produse");
-        const data = await res.json();
-        data.forEach(p => {
-            const opt = document.createElement("option");
-            opt.value = p.id;
-            opt.textContent = `${p.nume} (Stoc: ${p.stoc})`;
-            select.appendChild(opt);
-        });
-    } catch (err) { console.error(err); }
 }

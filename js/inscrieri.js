@@ -34,10 +34,14 @@ function renderInscrieri() {
     if (!inscrieriList) inscrieriList = [];
     inscrieriList.forEach(inscriere => {
         const tr = document.createElement('tr');
+        
+        // Formatare dată
+        const dataFormata = new Date(inscriere.dataOra).toLocaleString('ro-RO');
+
         tr.innerHTML = `
             <td>${inscriere.numeMembru}</td>
             <td>${inscriere.numeWOD}</td>
-            <td>${inscriere.dataOra}</td>
+            <td>${dataFormata}</td>
             <td>${inscriere.numeAntrenor || '-'}</td>
             <td>
                 <button class="btn-delete" data-membru-id="${inscriere.membruID}" data-clasa-id="${inscriere.clasaID}">Anulează</button>

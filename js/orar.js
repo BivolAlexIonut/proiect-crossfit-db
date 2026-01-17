@@ -112,8 +112,8 @@ function handleFormSubmit(event) {
         body: JSON.stringify(orarData)
     })
         .then(response => { if (!response.ok) { throw new Error('Eroare la salvarea regulii'); } return response.json(); })
-        .then(data => { console.log(data.mesaj); resetFormular(); loadOrar(); })
-        .catch(error => console.error('Eroare formular:', error));
+        .then(data => { alert(data.mesaj); resetFormular(); loadOrar(); })
+        .catch(error => alert('Eroare formular: ' + error.message));
 }
 
 // Populează formularul la click pe "Editează"
@@ -144,8 +144,8 @@ function handleDelete(id) {
         body: JSON.stringify({ id: parseInt(id, 10) })
     })
         .then(response => { if (!response.ok) { throw new Error('Eroare la ștergerea regulii'); } return response.json(); })
-        .then(data => { console.log(data.mesaj); loadOrar(); })
-        .catch(error => console.error('Eroare la ștergere:', error));
+        .then(data => { alert(data.mesaj); loadOrar(); })
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 // Resetează formularul

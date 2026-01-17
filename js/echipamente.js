@@ -27,7 +27,7 @@ function loadEchipamente() {
             echipamenteList = data;
             renderEchipamente();
         })
-        .catch(error => console.error('Eroare la preluarea echipamentelor:', error));
+        .catch(error => alert('Eroare la preluarea echipamentelor: ' + error.message));
 }
 
 function renderEchipamente() {
@@ -97,11 +97,11 @@ function handleFormSubmit(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             resetFormular();
             loadEchipamente();
         })
-        .catch(error => console.error('Eroare formular:', error));
+        .catch(error => alert('Eroare formular: ' + error.message));
 }
 
 function handleEditClick(id) {
@@ -115,7 +115,7 @@ function handleEditClick(id) {
             document.querySelector('#form-add-echipament button[type="submit"]').textContent = 'Salvează Modificările';
             window.scrollTo(0, 0);
         })
-        .catch(error => console.error('Eroare la preluarea datelor echipamentului:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function handleDelete(id) {
@@ -133,10 +133,10 @@ function handleDelete(id) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             loadEchipamente();
         })
-        .catch(error => console.error('Eroare la ștergere:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function resetFormular() {

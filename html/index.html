@@ -2,68 +2,76 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Management Membri</title>
+    <title>Management Membri - CrossFit</title>
     <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h1>Panou de Control CrossFit</h1>
+    <!-- HEADER -->
+    <h1>Panou de Control CrossFit</h1>
 
-<nav>
-    <a href="/">Membri</a> |
-    <a href="/antrenori">Antrenori</a> |
-    <a href="/abonamente">Abonamente</a> |
-    <a href="/produse">Produse</a> |
-    <a href="/echipamente">Echipamente</a> |
-    <a href="/tipuri-antrenament">Categorii Antrenament</a> |
-    <a href="/clase">Clase (Orar)</a> |
-    <a href="/inscrieri">Înscrieri</a> |
-    <a href="/orar">Orar Săptămânal</a> |
-    <a href="/achizitii">Achiziții</a> |
-    <a href="/mentorat">Mentorat</a> |
-    <a href="/competitii">Competiții</a> |
-    <a href="/rapoarte">Rapoarte</a>
-</nav>
-<h2>Adaugă Membru Nou</h2>
-<form id="form-add-membru">
-    <div>
-        <label for="nume">Nume:</label>
-        <input type="text" id="nume" required>
-    </div>
-    <div>
-        <label for="prenume">Prenume:</label>
-        <input type="text" id="prenume" required>
-    </div>
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" required>
-    </div>
-    <div>
-        <label for="select-abonament">Abonament:</label>
-        <select id="select-abonament" required>
-            <option value="">Alege un abonament...</option>
-        </select>
-    </div>
-    <button type="submit">Adaugă Membru</button>
-</form>
+    <!-- NAVIGARE -->
+    <nav>
+        <a href="/" class="active">Membri</a> |
+        <a href="/antrenori">Antrenori</a> |
+        <a href="/abonamente">Abonamente</a> |
+        <a href="/produse">Produse</a> |
+        <a href="/echipamente">Echipamente</a> |
+        <a href="/tipuri-antrenament">Categorii Antrenament</a> |
+        <a href="/clase">Clase (Orar)</a> |
+        <a href="/inscrieri">Înscrieri</a> |
+        <a href="/orar">Orar Săptămânal</a> |
+        <a href="/achizitii">Achiziții</a> |
+        <a href="/mentorat">Mentorat</a> |
+        <a href="/competitii">Competiții</a> |
+        <a href="/rapoarte">Rapoarte</a>
+    </nav>
 
-<h2>Membri Activi</h2>
-<table>
-    <thead>
-    <tr>
-        <th onclick="sortMembri('id')" style="cursor: pointer;">ID Membru &#x2195;</th>
-        <th onclick="sortMembri('nume')" style="cursor: pointer;">Nume &#x2195;</th>
-        <th onclick="sortMembri('prenume')" style="cursor: pointer;">Prenume &#x2195;</th>
-        <th onclick="sortMembri('email')" style="cursor: pointer;">Email &#x2195;</th>
-        <th>Acțiuni</th>
-    </tr>
-    </thead>
-    <tbody id="lista-membri">
-    <tr><td colspan="4">Se încarcă membrii...</td></tr>
-    </tbody>
-</table>
+    <!-- SECȚIUNE ADĂUGARE -->
+    <h2>Adaugă Membru Nou</h2>
+    <form id="form-add-membru">
+        <div>
+            <label for="nume">Nume:</label>
+            <input type="text" id="nume" required>
+        </div>
+        <div>
+            <label for="prenume">Prenume:</label>
+            <input type="text" id="prenume" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+        </div>
+        <div>
+            <label for="select-abonament">Abonament:</label>
+            <select id="select-abonament" required>
+                <option value="">Se încarcă abonamentele...</option>
+            </select>
+        </div>
+        <button type="submit">Adaugă Membru</button>
+    </form>
 
-<script src="/js/script.js" defer></script>
+    <!-- SECȚIUNE LISTĂ -->
+    <h2>Membri Activi</h2>
+    <table>
+        <thead>
+        <tr>
+            <th onclick="sortMembri('id')" style="cursor: pointer;">ID &#x2195;</th>
+            <th onclick="sortMembri('nume')" style="cursor: pointer;">Nume &#x2195;</th>
+            <th onclick="sortMembri('prenume')" style="cursor: pointer;">Prenume &#x2195;</th>
+            <th onclick="sortMembri('email')" style="cursor: pointer;">Email &#x2195;</th>
+            <th>Abonament</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+        <tbody id="lista-membri">
+        <tr><td colspan="6">Se încarcă membrii...</td></tr>
+        </tbody>
+    </table>
+
+    <!-- SCRIPTS -->
+    <script src="/js/script.js" defer></script>
 
 </body>
 </html>

@@ -96,11 +96,11 @@ function handleFormSubmit(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             resetFormular();
             loadAbonamente();
         })
-        .catch(error => console.error('Eroare formular:', error));
+        .catch(error => alert('Eroare formular: ' + error.message));
 }
 
 function handleEditClick(id) {
@@ -132,10 +132,10 @@ function handleDelete(id) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             loadAbonamente();
         })
-        .catch(error => console.error('Eroare la ștergere:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function resetFormular() {

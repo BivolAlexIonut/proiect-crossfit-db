@@ -5,11 +5,18 @@ let lastSortColumn = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadCompetitii();
-    loadParticipari(); // Încărcăm tabelul de participări
-    loadSelectsParticipare(); // Încărcăm dropdown-urile pentru formularul de înscriere
+    loadParticipari();
+    loadSelectsParticipare();
 
-    document.getElementById('form-add-competitie').addEventListener('submit', handleAddCompetitie);
-    document.getElementById('form-add-participare').addEventListener('submit', handleAddParticipare);
+    const formAdd = document.getElementById('form-add-competitie');
+    if (formAdd) {
+        formAdd.addEventListener('submit', handleAddCompetitie);
+    }
+
+    const formInscriere = document.getElementById('form-inscriere-comp');
+    if (formInscriere) {
+        formInscriere.addEventListener('submit', handleAddParticipare);
+    }
 });
 
 // --- COMPETITII ---
@@ -20,21 +27,29 @@ function loadCompetitii() {
             competitiiList = data || [];
             renderCompetitii();
         })
-        .catch(err => console.error(err));
+        .catch(err => alert('Eroare la încărcarea competițiilor: ' + err.message));
 }
 
 function renderCompetitii() {
     const tbody = document.getElementById('lista-competitii');
+    if (!tbody) return;
     tbody.innerHTML = '';
+    
+    if (competitiiList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Nu există competiții.</td></tr>';
+        return;
+    }
+
     competitiiList.forEach(c => {
         const tr = document.createElement('tr');
+        const dataFormatata = new Date(c.data).toLocaleDateString('ro-RO');
         tr.innerHTML = `
-            <td>${c.id}</td>
-            <td>${c.nume}</td>
-            <td>${c.data}</td>
-            <td>${c.locatie}</td>
-            <td>${c.taxa} RON</td>
-            <td><button onclick="deleteCompetitie(${c.id})">Șterge</button></td>
+            <td data-label="ID">${c.id}</td>
+            <td data-label="Nume">${c.nume}</td>
+            <td data-label="Data">${dataFormatata}</td>
+            <td data-label="Locație">${c.locatie}</td>
+            <td data-label="Taxă">${c.taxa.toFixed(2)} RON</td>
+            <td data-label="Acțiuni"><button class="btn-delete" onclick="deleteCompetitie(${c.id})">Șterge</button></td>
         `;
         tbody.appendChild(tr);
     });
@@ -69,10 +84,10 @@ function sortCompetitii(column) {
 function handleAddCompetitie(e) {
     e.preventDefault();
     const data = {
-        nume: document.getElementById('nume-competitie').value,
-        data: document.getElementById('data-competitie').value,
-        locatie: document.getElementById('locatie-competitie').value,
-        taxa: parseFloat(document.getElementById('taxa-competitie').value)
+        nume: document.getElementById('nume').value,
+        data: document.getElementById('data').value,
+        locatie: document.getElementById('locatie').value,
+        taxa: parseFloat(document.getElementById('taxa').value)
     };
 
     fetch('/api/competitii/add', {
@@ -80,27 +95,43 @@ function handleAddCompetitie(e) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
-    .then(res => {
-        if(!res.ok) throw new Error('Eroare adăugare');
-        loadCompetitii();
-        loadSelectsParticipare(); // Reîncărcăm și dropdown-ul de competiții
-        e.target.reset();
+    .then(async res => {
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || 'Eroare la adăugare');
+        }
+        return res.json();
     })
-    .catch(err => alert('Eroare: ' + err));
+    .then(resp => {
+        alert(resp.mesaj);
+        loadCompetitii();
+        loadSelectsParticipare();
+        document.getElementById('form-add-competitie').reset();
+    })
+    .catch(err => alert('Eroare: ' + err.message));
 }
 
 function deleteCompetitie(id) {
-    if(!confirm('Ștergi competiția?')) return;
+    if (!confirm('Sigur ștergi competiția?')) return;
+    
     fetch('/api/competitii/delete', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({id: id})
     })
-    .then(() => {
+    .then(async res => {
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || 'Eroare la ștergere');
+        }
+        return res.json();
+    })
+    .then(resp => {
+        alert(resp.mesaj);
         loadCompetitii();
         loadSelectsParticipare();
     })
-    .catch(err => console.error(err));
+    .catch(err => alert('Eroare: ' + err.message));
 }
 
 // --- PARTICIPARI ---
@@ -111,27 +142,28 @@ function loadParticipari() {
             participariList = data || [];
             renderParticipari();
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error(err)); // Aici lasam console.error sau alert, e ok
 }
 
 function renderParticipari() {
     const tbody = document.getElementById('lista-participari');
+    if (!tbody) return;
     tbody.innerHTML = '';
+    
+    if (participariList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3">Nu există participanți înscriși.</td></tr>';
+        return;
+    }
+
     participariList.forEach(p => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${p.numeCompetitie}</td>
-            <td>${p.numeMembru}</td>
-            <td>${p.loculObtinut > 0 ? p.loculObtinut : '-'}</td>
+            <td data-label="Eveniment">${p.numeCompetitie}</td>
+            <td data-label="Membru">${p.numeMembru}</td>
+            <td data-label="Loc Obținut">${p.loculObtinut > 0 ? p.loculObtinut : '-'}</td>
         `;
         tbody.appendChild(tr);
     });
-}
-
-// Sortare pentru Participări (opțional, dar bun pentru consistență)
-// Presupunem că adăugăm onclick și în HTML-ul pentru participări dacă vrem sortare acolo
-function sortParticipari(column) {
-     // Implementare similară dacă se cere sortare și pe tabelul secundar
 }
 
 function loadSelectsParticipare() {
@@ -140,11 +172,12 @@ function loadSelectsParticipare() {
         .then(res => res.json())
         .then(data => {
             const sel = document.getElementById('select-competitie');
+            if (!sel) return;
             sel.innerHTML = '<option value="">Alege Competiția...</option>';
             if(data) data.forEach(c => {
                 const opt = document.createElement('option');
                 opt.value = c.id;
-                opt.textContent = `${c.nume} (${c.data})`;
+                opt.textContent = `${c.nume} (${new Date(c.data).toLocaleDateString('ro-RO')})`;
                 sel.appendChild(opt);
             });
         });
@@ -153,7 +186,8 @@ function loadSelectsParticipare() {
     fetch('/api/membri')
         .then(res => res.json())
         .then(data => {
-            const sel = document.getElementById('select-membru-comp');
+            const sel = document.getElementById('select-membru'); // ID corectat conform HTML
+            if (!sel) return;
             sel.innerHTML = '<option value="">Alege Membrul...</option>';
             if(data) data.forEach(m => {
                 const opt = document.createElement('option');
@@ -168,7 +202,7 @@ function handleAddParticipare(e) {
     e.preventDefault();
     const data = {
         competitieID: parseInt(document.getElementById('select-competitie').value),
-        membruID: parseInt(document.getElementById('select-membru-comp').value)
+        membruID: parseInt(document.getElementById('select-membru').value)
     };
 
     fetch('/api/competitii/participari/add', {
@@ -176,10 +210,16 @@ function handleAddParticipare(e) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
-    .then(res => {
-        if(!res.ok) throw new Error('Eroare înscriere');
-        alert('Membru înscris!');
+    .then(async res => {
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(text || 'Eroare înscriere');
+        }
+        return res.json();
+    })
+    .then(resp => {
+        alert(resp.mesaj);
         loadParticipari();
     })
-    .catch(err => alert('Eroare: ' + err));
+    .catch(err => alert('Eroare: ' + err.message));
 }

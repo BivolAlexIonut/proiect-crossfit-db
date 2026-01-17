@@ -27,7 +27,7 @@ function loadProduse() {
             produseList = data;
             renderProduse();
         })
-        .catch(error => console.error('Eroare la preluarea produselor:', error));
+        .catch(error => alert('Eroare la preluarea produselor: ' + error.message));
 }
 
 function renderProduse() {
@@ -99,11 +99,11 @@ function handleFormSubmit(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             resetFormular();
             loadProduse();
         })
-        .catch(error => console.error('Eroare formular:', error));
+        .catch(error => alert('Eroare formular: ' + error.message));
 }
 
 function handleEditClick(id) {
@@ -118,7 +118,7 @@ function handleEditClick(id) {
             document.querySelector('#form-add-produs button[type="submit"]').textContent = 'Salvează Modificările';
             window.scrollTo(0, 0);
         })
-        .catch(error => console.error('Eroare la preluarea datelor produsului:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function handleDelete(id) {
@@ -136,10 +136,10 @@ function handleDelete(id) {
             return response.json();
         })
         .then(data => {
-            console.log(data.mesaj);
+            alert(data.mesaj);
             loadProduse();
         })
-        .catch(error => console.error('Eroare la ștergere:', error));
+        .catch(error => alert('Eroare: ' + error.message));
 }
 
 function resetFormular() {
