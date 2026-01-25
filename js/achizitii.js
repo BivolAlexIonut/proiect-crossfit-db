@@ -133,7 +133,7 @@ function renderAchizitii() {
     const tbody = document.getElementById("lista-achizitii");
     tbody.innerHTML = "";
     if (achizitiiList.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='6'>Nu există achiziții.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='7'>Nu există achiziții.</td></tr>";
         return;
     }
     achizitiiList.forEach(a => {
@@ -144,6 +144,7 @@ function renderAchizitii() {
             <td data-label="Produs">${a.numeProdus}</td>
             <td data-label="Data">${a.dataAchizitiei}</td>
             <td data-label="Cantitate">${a.cantitate}</td>
+            <td data-label="Total">${a.pretTotal ? a.pretTotal.toFixed(2) : "0.00"}</td>
             <td data-label="Acțiuni">
                 <button class="btn-delete" onclick="deleteAchizitie(${a.id})">Șterge</button>
             </td>

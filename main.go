@@ -85,13 +85,14 @@ type Inscriere struct {
 }
 
 type Achizitie struct {
-	ID             int    `json:"id"`
-	MembruID       int    `json:"membruID"`
-	ProdusID       int    `json:"produsID"`
-	NumeMembru     string `json:"numeMembru,omitempty"`
-	NumeProdus     string `json:"numeProdus,omitempty"`
-	DataAchizitiei string `json:"dataAchizitiei"`
-	Cantitate      int    `json:"cantitate"`
+	ID             int     `json:"id"`
+	MembruID       int     `json:"membruID"`
+	ProdusID       int     `json:"produsID"`
+	NumeMembru     string  `json:"numeMembru,omitempty"`
+	NumeProdus     string  `json:"numeProdus,omitempty"`
+	DataAchizitiei string  `json:"dataAchizitiei"`
+	Cantitate      int     `json:"cantitate"`
+	PretTotal      float64 `json:"pretTotal"`
 }
 
 type Mentorat struct {
@@ -855,7 +856,8 @@ func handlerGetAchizitii(w http.ResponseWriter, _ *http.Request) {
 			m.Nume || ' ' || m.Prenume AS NumeMembru,
 			p.NumeProdus, 
 			TO_CHAR(a.DataAchizitiei, 'YYYY-MM-DD') AS DataAchizitiei,
-			a.Cantitate
+			a.Cantitate,
+			(a.Cantitate * p.PretCurent) AS PretTotal
 		FROM ACHIZITII a
 		JOIN MEMBRI m ON a.MembruID = m.MembruID
 		JOIN PRODUSE p ON a.ProdusID = p.ProdusID
@@ -871,7 +873,7 @@ func handlerGetAchizitii(w http.ResponseWriter, _ *http.Request) {
 	var achizitii []Achizitie
 	for rows.Next() {
 		var a Achizitie
-		rows.Scan(&a.ID, &a.MembruID, &a.ProdusID, &a.NumeMembru, &a.NumeProdus, &a.DataAchizitiei, &a.Cantitate)
+		rows.Scan(&a.ID, &a.MembruID, &a.ProdusID, &a.NumeMembru, &a.NumeProdus, &a.DataAchizitiei, &a.Cantitate, &a.PretTotal)
 		achizitii = append(achizitii, a)
 	}
 	w.Header().Set("Content-Type", "application/json")
