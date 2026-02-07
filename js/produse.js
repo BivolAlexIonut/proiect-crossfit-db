@@ -76,10 +76,23 @@ function sortProduse(column) {
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const pret = parseFloat(document.getElementById('pret-produs').value);
+    const stoc = parseInt(document.getElementById('stoc-produs').value, 10);
+
+    if (isNaN(pret) || pret < 0) {
+        alert('Eroare: Prețul produsului trebuie să fie un număr pozitiv (>= 0).');
+        return;
+    }
+
+    if (isNaN(stoc) || stoc < 0) {
+        alert('Eroare: Stocul trebuie să fie un număr pozitiv (>= 0).');
+        return;
+    }
+
     const produsData = {
         nume: document.getElementById('nume-produs').value,
-        pret: parseFloat(document.getElementById('pret-produs').value),
-        stoc: parseInt(document.getElementById('stoc-produs').value, 10)
+        pret: pret,
+        stoc: stoc
     };
 
     let url = '/api/produse/add';

@@ -92,9 +92,23 @@ function loadCategoriiDropdown() {
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const ziua = parseInt(document.getElementById('select-zi').value, 10);
+    const ora = document.getElementById('ora').value;
+
+    if (isNaN(ziua) || ziua < 1 || ziua > 7) {
+        alert('Eroare: Ziua săptămânii trebuie să fie între 1 (Luni) și 7 (Duminică).');
+        return;
+    }
+
+    const oraRegex = /^[0-2][0-9]:[0-5][0-9]$/;
+    if (!oraRegex.test(ora)) {
+        alert('Eroare: Ora trebuie să fie în formatul HH:MM (ex: 09:00, 18:30).');
+        return;
+    }
+
     const orarData = {
-        ziuaSaptamanii: parseInt(document.getElementById('select-zi').value, 10),
-        ora: document.getElementById('ora').value,
+        ziuaSaptamanii: ziua,
+        ora: ora,
         numeWODTemplate: document.getElementById('nume-wod-template').value,
         antrenorID: parseInt(document.getElementById('select-antrenor-orar').value, 10),
         tipAntrenamentID: parseInt(document.getElementById('select-categorie-orar').value, 10)

@@ -76,7 +76,13 @@ async function handleAddAchizitie(e) {
     e.preventDefault();
     const membruID = document.getElementById("select-membru").value;
     const produsID = document.getElementById("select-produs").value;
-    const cantitate = document.getElementById("cantitate").value;
+    const cantitateVal = document.getElementById("cantitate").value;
+    const cantitate = parseInt(cantitateVal, 10);
+
+    if (isNaN(cantitate) || cantitate <= 0) {
+        alert("Eroare: Cantitatea trebuie să fie strict mai mare decât 0.");
+        return;
+    }
 
     try {
         const res = await fetch("/api/achizitii/add", {
@@ -85,7 +91,7 @@ async function handleAddAchizitie(e) {
             body: JSON.stringify({
                 membruID: parseInt(membruID),
                 produsID: parseInt(produsID),
-                cantitate: parseInt(cantitate)
+                cantitate: cantitate
             })
         });
 

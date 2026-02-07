@@ -75,9 +75,16 @@ function sortEchipamente(column) {
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const cantitate = parseInt(document.getElementById('cantitate-echipament').value, 10);
+
+    if (isNaN(cantitate) || cantitate < 0) {
+        alert('Eroare: Cantitatea totală trebuie să fie un număr pozitiv (>= 0).');
+        return;
+    }
+
     const echipamentData = {
         nume: document.getElementById('nume-echipament').value,
-        cantitate: parseInt(document.getElementById('cantitate-echipament').value, 10)
+        cantitate: cantitate
     };
 
     let url = '/api/echipamente/add';

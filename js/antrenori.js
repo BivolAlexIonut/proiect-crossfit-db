@@ -76,10 +76,18 @@ function sortAntrenori(column) {
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const specializare = document.getElementById('specializare-antrenor').value;
+    const validSpecializari = ['Gimnastica', 'Haltere', 'Crossfit L1', 'Crossfit L2', 'Mobilitate', 'Cardio'];
+
+    if (!validSpecializari.includes(specializare)) {
+        alert('Eroare: Specializarea selectată nu este validă! Alegeți una din listă.');
+        return;
+    }
+
     const antrenorData = {
         nume: document.getElementById('nume-antrenor').value,
         prenume: document.getElementById('prenume-antrenor').value,
-        specializare: document.getElementById('specializare-antrenor').value
+        specializare: specializare
     };
 
     let url = '/api/antrenori/add';

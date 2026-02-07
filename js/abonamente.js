@@ -74,9 +74,33 @@ function sortAbonamente(column) {
 function handleFormSubmit(event) {
     event.preventDefault();
 
+    const tip = document.getElementById('tip-abonament').value;
+    const pret = parseFloat(document.getElementById('pret-abonament').value);
+
+    // Listă implicită de tipuri de abonament (conform datelor inițiale), 
+    // adăugată pentru a răspunde cerinței de validare strictă, deși SQL-ul permite orice string.
+    const tipuriValide = [
+        'Standard Crossfit', 
+        'Student Crossfit', 
+        'Open Gym', 
+        'Premium All Access', 
+        'Full Time', 
+        'Weekend Only'
+    ];
+
+    if (!tipuriValide.includes(tip)) {
+        alert(`Eroare: Tipul abonamentului trebuie să fie unul dintre: \n${tipuriValide.join(', ')}`);
+        return;
+    }
+
+    if (isNaN(pret) || pret < 0) {
+        alert('Eroare: Prețul abonamentului trebuie să fie un număr pozitiv (>= 0).');
+        return;
+    }
+
     const abonamentData = {
-        tip: document.getElementById('tip-abonament').value,
-        pret: parseFloat(document.getElementById('pret-abonament').value)
+        tip: tip,
+        pret: pret
     };
 
     let url = '/api/abonamente/add';

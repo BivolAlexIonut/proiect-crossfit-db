@@ -83,11 +83,18 @@ function sortCompetitii(column) {
 
 function handleAddCompetitie(e) {
     e.preventDefault();
+    const taxa = parseFloat(document.getElementById('taxa').value);
+
+    if (isNaN(taxa) || taxa < 0) {
+        alert('Eroare: Taxa de participare trebuie să fie un număr pozitiv (>= 0).');
+        return;
+    }
+
     const data = {
         nume: document.getElementById('nume').value,
         data: document.getElementById('data').value,
         locatie: document.getElementById('locatie').value,
-        taxa: parseFloat(document.getElementById('taxa').value)
+        taxa: taxa
     };
 
     fetch('/api/competitii/add', {

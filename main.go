@@ -12,16 +12,9 @@ import (
 	_ "github.com/godror/godror"
 )
 
-// =================================================================================
-// CONFIGURARE BAZĂ DE DATE
-// =================================================================================
-const dsn = "CROSSFIT_ADMIN/HTsjReTy12@localhost:1521/XEPDB1"
+const dsn = "CROSSFIT_ADMIN/HTsjReTy12@localhost:1521/XE"
 
 var db *sql.DB
-
-// =================================================================================
-// DEFINIREA STRUCTURILOR DE DATE (MODELS)
-// =================================================================================
 
 type Membru struct {
 	ID           int    `json:"id"`
@@ -29,7 +22,7 @@ type Membru struct {
 	Prenume      string `json:"prenume"`
 	Email        string `json:"email"`
 	AbonamentID  int    `json:"abonamentID"`
-	TipAbonament string `json:"tipAbonament,omitempty"` // Câmp adăugat pentru afișare (JOIN)
+	TipAbonament string `json:"tipAbonament,omitempty"`
 }
 
 type Abonament struct {
@@ -103,11 +96,11 @@ type Mentorat struct {
 }
 
 type Competitie struct {
-	ID       int     `json:"id"`
-	Nume     string  `json:"nume"`
-	Data     string  `json:"data"`
-	Locatie  string  `json:"locatie"`
-	Taxa     float64 `json:"taxa"`
+	ID      int     `json:"id"`
+	Nume    string  `json:"nume"`
+	Data    string  `json:"data"`
+	Locatie string  `json:"locatie"`
+	Taxa    float64 `json:"taxa"`
 }
 
 type ParticipareCompetitie struct {
@@ -129,7 +122,6 @@ type OrarTemplate struct {
 	NumeCategorie    string `json:"numeCategorie,omitempty"`
 }
 
-// Structură auxiliară pentru scanarea regulilor din BD (gestionare NULL)
 type OrarTemplateScan struct {
 	TemplateID       int
 	ZiuaSaptamanii   int
@@ -175,7 +167,6 @@ func main() {
 	}
 	fmt.Println("Conexiune la baza de date reușită!")
 
-	// --- ACTUALIZARE VIEW-uri LA START (Corecție logică rapoarte) ---
 	_, err = db.Exec(`
 		CREATE OR REPLACE VIEW V_RAPORT_POPULARITATE AS
 		SELECT
@@ -249,7 +240,7 @@ func main() {
 	// =============================================================================
 	// DEFINIRE RUTE API (BACKEND)
 	// =============================================================================
-	
+
 	// Membri
 	http.HandleFunc("/api/membri", handlerGetMembri)
 	http.HandleFunc("/api/membru", handlerGetUnMembru)
@@ -1231,11 +1222,17 @@ func handlerGetClase(w http.ResponseWriter, _ *http.Request) {
 		var c Clasa
 		var numeAntrenor, numeCategorie, descriereWOD sql.NullString
 		rows.Scan(&c.ID, &c.NumeWOD, &descriereWOD, &c.DataOra, &c.AntrenorID, &numeAntrenor, &c.TipAntrenamentID, &numeCategorie)
-		
-		if numeAntrenor.Valid { c.NumeAntrenor = numeAntrenor.String }
-		if numeCategorie.Valid { c.NumeCategorie = numeCategorie.String }
-		if descriereWOD.Valid { c.DescriereWOD = descriereWOD.String }
-		
+
+		if numeAntrenor.Valid {
+			c.NumeAntrenor = numeAntrenor.String
+		}
+		if numeCategorie.Valid {
+			c.NumeCategorie = numeCategorie.String
+		}
+		if descriereWOD.Valid {
+			c.DescriereWOD = descriereWOD.String
+		}
+
 		clase = append(clase, c)
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -1263,8 +1260,10 @@ func handlerGetOClasa(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Clasa nu a fost găsită", http.StatusNotFound)
 		return
 	}
-	if descriereWOD.Valid { c.DescriereWOD = descriereWOD.String }
-	
+	if descriereWOD.Valid {
+		c.DescriereWOD = descriereWOD.String
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(c)
 }
@@ -1367,8 +1366,12 @@ func handlerGetInscrieri(w http.ResponseWriter, _ *http.Request) {
 		var i Inscriere
 		var numeAntrenor, dataOra sql.NullString
 		rows.Scan(&i.MembruID, &i.ClasaID, &i.NumeMembru, &i.NumeWOD, &dataOra, &numeAntrenor)
-		if numeAntrenor.Valid { i.NumeAntrenor = numeAntrenor.String }
-		if dataOra.Valid { i.DataOra = dataOra.String }
+		if numeAntrenor.Valid {
+			i.NumeAntrenor = numeAntrenor.String
+		}
+		if dataOra.Valid {
+			i.DataOra = dataOra.String
+		}
 		inscrieri = append(inscrieri, i)
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -1385,7 +1388,7 @@ func handlerAddInscriere(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "JSON invalid", http.StatusBadRequest)
 		return
 	}
-	
+
 	// Verificare limită abonament
 	var check struct {
 		TipAbonament     string
@@ -1479,9 +1482,15 @@ func handlerGetOrar(w http.ResponseWriter, _ *http.Request) {
 		var o OrarTemplate
 		var numeAntrenor, numeCategorie, numeWOD sql.NullString
 		rows.Scan(&o.ID, &o.ZiuaSaptamanii, &o.Ora, &numeWOD, &o.AntrenorID, &numeAntrenor, &o.TipAntrenamentID, &numeCategorie)
-		if numeAntrenor.Valid { o.NumeAntrenor = numeAntrenor.String }
-		if numeCategorie.Valid { o.NumeCategorie = numeCategorie.String }
-		if numeWOD.Valid { o.NumeWODTemplate = numeWOD.String }
+		if numeAntrenor.Valid {
+			o.NumeAntrenor = numeAntrenor.String
+		}
+		if numeCategorie.Valid {
+			o.NumeCategorie = numeCategorie.String
+		}
+		if numeWOD.Valid {
+			o.NumeWODTemplate = numeWOD.String
+		}
 		orar = append(orar, o)
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -1503,7 +1512,9 @@ func handlerGetUnOrar(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Nu a fost găsit", http.StatusNotFound)
 		return
 	}
-	if numeWOD.Valid { o.NumeWODTemplate = numeWOD.String }
+	if numeWOD.Valid {
+		o.NumeWODTemplate = numeWOD.String
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(o)
 }
@@ -1598,7 +1609,9 @@ func handlerGenerateOrar(w http.ResponseWriter, r *http.Request) {
 	today := time.Now()
 	// Calculăm data următoarei zile de Luni
 	daysUntilNextMonday := (7 - int(today.Weekday()) + int(time.Monday)) % 7
-	if daysUntilNextMonday == 0 { daysUntilNextMonday = 7 }
+	if daysUntilNextMonday == 0 {
+		daysUntilNextMonday = 7
+	}
 	urmatorulLuni := today.AddDate(0, 0, daysUntilNextMonday)
 
 	claseGenerate := 0
@@ -1614,7 +1627,7 @@ func handlerGenerateOrar(w http.ResponseWriter, r *http.Request) {
 	for _, regula := range reguli {
 		dataClasei := urmatorulLuni.AddDate(0, 0, regula.ZiuaSaptamanii-1)
 		dataOraString := fmt.Sprintf("%sT%s", dataClasei.Format("2006-01-02"), regula.Ora)
-		
+
 		_, err := tx.Exec(queryInsert, regula.NumeWODTemplate, sql.NullString{}, dataOraString, regula.AntrenorID, regula.TipAntrenamentID)
 		if err != nil {
 			tx.Rollback()
@@ -1793,7 +1806,9 @@ func handlerGetParticipariCompetitie(w http.ResponseWriter, r *http.Request) {
 		var p ParticipareCompetitie
 		var loc sql.NullInt64
 		rows.Scan(&p.CompetitieID, &p.MembruID, &p.NumeCompetitie, &p.NumeMembru, &loc)
-		if loc.Valid { p.LoculObtinut = int(loc.Int64) }
+		if loc.Valid {
+			p.LoculObtinut = int(loc.Int64)
+		}
 		participari = append(participari, p)
 	}
 	w.Header().Set("Content-Type", "application/json")
