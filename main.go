@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	_ "github.com/godror/godror"
+
 )
 
 const dsn = "CROSSFIT_ADMIN/HTsjReTy12@localhost:1521/XE"
@@ -111,25 +111,7 @@ type ParticipareCompetitie struct {
 	LoculObtinut   int    `json:"loculObtinut"`
 }
 
-type OrarTemplate struct {
-	ID               int    `json:"id"`
-	ZiuaSaptamanii   int    `json:"ziuaSaptamanii"`
-	Ora              string `json:"ora"`
-	NumeWODTemplate  string `json:"numeWODTemplate"`
-	AntrenorID       int    `json:"antrenorID"`
-	TipAntrenamentID int    `json:"tipAntrenamentID"`
-	NumeAntrenor     string `json:"numeAntrenor,omitempty"`
-	NumeCategorie    string `json:"numeCategorie,omitempty"`
-}
 
-type OrarTemplateScan struct {
-	TemplateID       int
-	ZiuaSaptamanii   int
-	Ora              string
-	NumeWODTemplate  sql.NullString
-	AntrenorID       sql.NullInt64
-	TipAntrenamentID sql.NullInt64
-}
 
 // Structuri pentru Rapoarte
 type RaportAbonamente struct {
@@ -219,13 +201,7 @@ func main() {
 	servePage("/clase", "clase.html")
 	serveJS("/js/clase.js", "clase.js")
 
-	servePage("/inscrieri", "inscrieri.html")
-	serveJS("/js/inscrieri.js", "inscrieri.js")
 
-	servePage("/orar", "orar.html")
-	serveJS("/js/orar.js", "orar.js")
-
-	servePage("/achizitii", "achizitii.html")
 	serveJS("/js/achizitii.js", "achizitii.js")
 
 	servePage("/mentorat", "mentorat.html")
@@ -290,20 +266,7 @@ func main() {
 	http.HandleFunc("/api/clase/update", handlerUpdateClasa)
 	http.HandleFunc("/api/clase/delete", handlerDeleteClasa)
 
-	// Înscrieri
-	http.HandleFunc("/api/inscrieri", handlerGetInscrieri)
-	http.HandleFunc("/api/inscrieri/add", handlerAddInscriere)
-	http.HandleFunc("/api/inscrieri/delete", handlerDeleteInscriere)
 
-	// Orar
-	http.HandleFunc("/api/orar", handlerGetOrar)
-	http.HandleFunc("/api/orar/single", handlerGetUnOrar)
-	http.HandleFunc("/api/orar/add", handlerAddOrar)
-	http.HandleFunc("/api/orar/update", handlerUpdateOrar)
-	http.HandleFunc("/api/orar/delete", handlerDeleteOrar)
-	http.HandleFunc("/api/orar/generate", handlerGenerateOrar)
-
-	// Achiziții
 	http.HandleFunc("/api/achizitii", handlerGetAchizitii)
 	http.HandleFunc("/api/achizitii/add", handlerAddAchizitie)
 	http.HandleFunc("/api/achizitii/delete", handlerDeleteAchizitie)
@@ -1196,23 +1159,24 @@ func handlerDeleteTip(w http.ResponseWriter, r *http.Request) {
 }
 
 // =================================================================================
-// HANDLERE PENTRU CLASE & ORAR
+// HANDLERE PENTRU CLASE
 // =================================================================================
 
 func handlerGetClase(w http.ResponseWriter, _ *http.Request) {
 	query := `
 		SELECT 
-			c.ClasaID, c.NumeWOD, c.DescriereWOD, TO_CHAR(c.DataOra, 'YYYY-MM-DD"T"HH24:MI') AS DataOraFormatata,
+			c.ClasaID, TO_CHAR(c.DataOra, 'YYYY-MM-DD"T"HH24:MI') AS DataOraFormatata,
 			a.AntrenorID, a.Nume || ' ' || a.Prenume AS NumeAntrenor,
-			t.TipAntrenamentID, t.NumeWOD AS NumeCategorie
+			t.TipID, t.NumeWOD AS NumeCategorie
 		FROM CLASE c
 		LEFT JOIN ANTRENORI a ON c.AntrenorID = a.AntrenorID
-		LEFT JOIN TIPURI_ANTRENAMENT t ON c.TipAntrenamentID = t.TipAntrenamentID
+		LEFT JOIN TIPURI_ANTRENAMENT t ON c.TipID = t.TipID
 		ORDER BY c.DataOra DESC
 	`
 	rows, err := db.Query(query)
 	if err != nil {
 		http.Error(w, "Eroare BD", http.StatusInternalServerError)
+		log.Println("Eroare handlerGetClase:", err)
 		return
 	}
 	defer rows.Close()
@@ -1220,17 +1184,18 @@ func handlerGetClase(w http.ResponseWriter, _ *http.Request) {
 	var clase []Clasa
 	for rows.Next() {
 		var c Clasa
-		var numeAntrenor, numeCategorie, descriereWOD sql.NullString
-		rows.Scan(&c.ID, &c.NumeWOD, &descriereWOD, &c.DataOra, &c.AntrenorID, &numeAntrenor, &c.TipAntrenamentID, &numeCategorie)
+		var numeAntrenor, numeCategorie sql.NullString
+		if err := rows.Scan(&c.ID, &c.DataOra, &c.AntrenorID, &numeAntrenor, &c.TipAntrenamentID, &numeCategorie); err != nil {
+			log.Println("Eroare Scan handlerGetClase:", err)
+			continue
+		}
 
 		if numeAntrenor.Valid {
 			c.NumeAntrenor = numeAntrenor.String
 		}
 		if numeCategorie.Valid {
 			c.NumeCategorie = numeCategorie.String
-		}
-		if descriereWOD.Valid {
-			c.DescriereWOD = descriereWOD.String
+			c.NumeWOD = numeCategorie.String // Folosim NumeWOD din tip antrenament
 		}
 
 		clase = append(clase, c)
@@ -1247,21 +1212,16 @@ func handlerGetOClasa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	query := `
-		SELECT ClasaID, NumeWOD, DescriereWOD, 
-		       TO_CHAR(DataOra, 'YYYY-MM-DD"T"HH24:MI') AS DataOraFormatata, 
-		       AntrenorID, TipAntrenamentID 
+		SELECT ClasaID, TO_CHAR(DataOra, 'YYYY-MM-DD"T"HH24:MI') AS DataOraFormatata, 
+		       AntrenorID, TipID 
 		FROM CLASE 
 		WHERE ClasaID = :1
 	`
 	var c Clasa
-	var descriereWOD sql.NullString
-	err = db.QueryRow(query, id).Scan(&c.ID, &c.NumeWOD, &descriereWOD, &c.DataOra, &c.AntrenorID, &c.TipAntrenamentID)
+	err = db.QueryRow(query, id).Scan(&c.ID, &c.DataOra, &c.AntrenorID, &c.TipAntrenamentID)
 	if err != nil {
 		http.Error(w, "Clasa nu a fost găsită", http.StatusNotFound)
 		return
-	}
-	if descriereWOD.Valid {
-		c.DescriereWOD = descriereWOD.String
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -1278,11 +1238,12 @@ func handlerAddClasa(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "JSON invalid", http.StatusBadRequest)
 		return
 	}
-	query := `INSERT INTO CLASE (ClasaID, NumeWOD, DescriereWOD, DataOra, AntrenorID, TipAntrenamentID)
-			  VALUES (CLASE_SEQ.NEXTVAL, :1, :2, TO_TIMESTAMP(:3, 'YYYY-MM-DD"T"HH24:MI'), :4, :5)`
-	_, err := db.Exec(query, c.NumeWOD, c.DescriereWOD, c.DataOra, c.AntrenorID, c.TipAntrenamentID)
+	query := `INSERT INTO CLASE (ClasaID, AntrenorID, TipID, DataOra)
+			  VALUES (CLASE_SEQ.NEXTVAL, :1, :2, TO_DATE(:3, 'YYYY-MM-DD"T"HH24:MI'))`
+	_, err := db.Exec(query, c.AntrenorID, c.TipAntrenamentID, c.DataOra)
 	if err != nil {
 		http.Error(w, "Eroare la inserarea în BD", http.StatusInternalServerError)
+		log.Println("Eroare handlerAddClasa:", err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -1301,12 +1262,12 @@ func handlerUpdateClasa(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	query := `UPDATE CLASE 
-			  SET NumeWOD = :1, DescriereWOD = :2, DataOra = TO_TIMESTAMP(:3, 'YYYY-MM-DD"T"HH24:MI'), 
-				  AntrenorID = :4, TipAntrenamentID = :5
-			  WHERE ClasaID = :6`
-	_, err := db.Exec(query, c.NumeWOD, c.DescriereWOD, c.DataOra, c.AntrenorID, c.TipAntrenamentID, c.ID)
+			  SET AntrenorID = :1, TipID = :2, DataOra = TO_DATE(:3, 'YYYY-MM-DD"T"HH24:MI')
+			  WHERE ClasaID = :4`
+	_, err := db.Exec(query, c.AntrenorID, c.TipAntrenamentID, c.DataOra, c.ID)
 	if err != nil {
 		http.Error(w, "Eroare la actualizarea în BD", http.StatusInternalServerError)
+		log.Println("Eroare handlerUpdateClasa:", err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -1346,17 +1307,19 @@ func handlerGetInscrieri(w http.ResponseWriter, _ *http.Request) {
 		SELECT 
 			i.MembruID, i.ClasaID,
 			m.Nume || ' ' || m.Prenume AS NumeMembru,
-			c.NumeWOD, TO_CHAR(c.DataOra, 'YYYY-MM-DD HH24:MI') AS DataOraFormatata,
+			t.NumeWOD, TO_CHAR(c.DataOra, 'YYYY-MM-DD HH24:MI') AS DataOraFormatata,
 			a.Nume || ' ' || a.Prenume AS NumeAntrenor
 		FROM INSCRIERI i
 		JOIN MEMBRI m ON i.MembruID = m.MembruID
 		JOIN CLASE c ON i.ClasaID = c.ClasaID
+		JOIN TIPURI_ANTRENAMENT t ON c.TipID = t.TipID
 		LEFT JOIN ANTRENORI a ON c.AntrenorID = a.AntrenorID
 		ORDER BY c.DataOra DESC
 	`
 	rows, err := db.Query(query)
 	if err != nil {
 		http.Error(w, "Eroare BD", http.StatusInternalServerError)
+		log.Println("Eroare handlerGetInscrieri:", err)
 		return
 	}
 	defer rows.Close()
@@ -1364,13 +1327,19 @@ func handlerGetInscrieri(w http.ResponseWriter, _ *http.Request) {
 	var inscrieri []Inscriere
 	for rows.Next() {
 		var i Inscriere
-		var numeAntrenor, dataOra sql.NullString
-		rows.Scan(&i.MembruID, &i.ClasaID, &i.NumeMembru, &i.NumeWOD, &dataOra, &numeAntrenor)
+		var numeAntrenor, dataOra, numeWOD sql.NullString
+		if err := rows.Scan(&i.MembruID, &i.ClasaID, &i.NumeMembru, &numeWOD, &dataOra, &numeAntrenor); err != nil {
+			log.Println("Eroare Scan handlerGetInscrieri:", err)
+			continue
+		}
 		if numeAntrenor.Valid {
 			i.NumeAntrenor = numeAntrenor.String
 		}
 		if dataOra.Valid {
 			i.DataOra = dataOra.String
+		}
+		if numeWOD.Valid {
+			i.NumeWOD = numeWOD.String
 		}
 		inscrieri = append(inscrieri, i)
 	}
@@ -1455,195 +1424,7 @@ func handlerDeleteInscriere(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"mesaj": "Înscriere anulată cu succes"})
 }
 
-// =================================================================================
-// HANDLERE PENTRU ORAR (TEMPLATE & GENERARE)
-// =================================================================================
 
-func handlerGetOrar(w http.ResponseWriter, _ *http.Request) {
-	query := `
-		SELECT 
-			ot.TemplateID, ot.ZiuaSaptamanii, ot.Ora, ot.NumeWOD_Template,
-			a.AntrenorID, a.Nume || ' ' || a.Prenume AS NumeAntrenor,
-			t.TipAntrenamentID, t.NumeWOD AS NumeCategorie
-		FROM ORAR_TEMPLATE ot
-		LEFT JOIN ANTRENORI a ON ot.AntrenorID = a.AntrenorID
-		LEFT JOIN TIPURI_ANTRENAMENT t ON ot.TipAntrenamentID = t.TipAntrenamentID
-		ORDER BY ot.ZiuaSaptamanii, ot.Ora
-	`
-	rows, err := db.Query(query)
-	if err != nil {
-		http.Error(w, "Eroare BD", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	var orar []OrarTemplate
-	for rows.Next() {
-		var o OrarTemplate
-		var numeAntrenor, numeCategorie, numeWOD sql.NullString
-		rows.Scan(&o.ID, &o.ZiuaSaptamanii, &o.Ora, &numeWOD, &o.AntrenorID, &numeAntrenor, &o.TipAntrenamentID, &numeCategorie)
-		if numeAntrenor.Valid {
-			o.NumeAntrenor = numeAntrenor.String
-		}
-		if numeCategorie.Valid {
-			o.NumeCategorie = numeCategorie.String
-		}
-		if numeWOD.Valid {
-			o.NumeWODTemplate = numeWOD.String
-		}
-		orar = append(orar, o)
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(orar)
-}
-
-func handlerGetUnOrar(w http.ResponseWriter, r *http.Request) {
-	idParam := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
-		http.Error(w, "ID invalid", http.StatusBadRequest)
-		return
-	}
-	query := `SELECT TemplateID, ZiuaSaptamanii, Ora, NumeWOD_Template, AntrenorID, TipAntrenamentID FROM ORAR_TEMPLATE WHERE TemplateID = :1`
-	var o OrarTemplate
-	var numeWOD sql.NullString
-	err = db.QueryRow(query, id).Scan(&o.ID, &o.ZiuaSaptamanii, &o.Ora, &numeWOD, &o.AntrenorID, &o.TipAntrenamentID)
-	if err != nil {
-		http.Error(w, "Nu a fost găsit", http.StatusNotFound)
-		return
-	}
-	if numeWOD.Valid {
-		o.NumeWODTemplate = numeWOD.String
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(o)
-}
-
-func handlerAddOrar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
-		return
-	}
-	var o OrarTemplate
-	if err := json.NewDecoder(r.Body).Decode(&o); err != nil {
-		http.Error(w, "JSON invalid", http.StatusBadRequest)
-		return
-	}
-	query := `INSERT INTO ORAR_TEMPLATE (TemplateID, ZiuaSaptamanii, Ora, NumeWOD_Template, AntrenorID, TipAntrenamentID)
-			  VALUES (ORAR_TEMPLATE_SEQ.NEXTVAL, :1, :2, :3, :4, :5)`
-	_, err := db.Exec(query, o.ZiuaSaptamanii, o.Ora, o.NumeWODTemplate, o.AntrenorID, o.TipAntrenamentID)
-	if err != nil {
-		http.Error(w, "Eroare la inserarea în BD", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]string{"mesaj": "Regulă de orar adăugată cu succes"})
-}
-
-func handlerUpdateOrar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
-		return
-	}
-	var o OrarTemplate
-	if err := json.NewDecoder(r.Body).Decode(&o); err != nil {
-		http.Error(w, "JSON invalid", http.StatusBadRequest)
-		return
-	}
-	query := `UPDATE ORAR_TEMPLATE 
-			  SET ZiuaSaptamanii = :1, Ora = :2, NumeWOD_Template = :3, AntrenorID = :4, TipAntrenamentID = :5
-			  WHERE TemplateID = :6`
-	_, err := db.Exec(query, o.ZiuaSaptamanii, o.Ora, o.NumeWODTemplate, o.AntrenorID, o.TipAntrenamentID, o.ID)
-	if err != nil {
-		http.Error(w, "Eroare la actualizarea în BD", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"mesaj": "Regulă de orar actualizată cu succes"})
-}
-
-func handlerDeleteOrar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
-		return
-	}
-	var payload struct {
-		ID int `json:"id"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
-		http.Error(w, "JSON invalid", http.StatusBadRequest)
-		return
-	}
-	query := `DELETE FROM ORAR_TEMPLATE WHERE TemplateID = :1`
-	_, err := db.Exec(query, payload.ID)
-	if err != nil {
-		http.Error(w, "Eroare la ștergerea din BD", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"mesaj": "Regulă de orar ștearsă cu succes"})
-}
-
-func handlerGenerateOrar(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "Metoda nu este permisă", http.StatusMethodNotAllowed)
-		return
-	}
-	rows, err := db.Query(`SELECT TemplateID, ZiuaSaptamanii, Ora, NumeWOD_Template, AntrenorID, TipAntrenamentID FROM ORAR_TEMPLATE`)
-	if err != nil {
-		http.Error(w, "Eroare la citirea regulilor", http.StatusInternalServerError)
-		return
-	}
-	defer rows.Close()
-
-	var reguli []OrarTemplateScan
-	for rows.Next() {
-		var r OrarTemplateScan
-		rows.Scan(&r.TemplateID, &r.ZiuaSaptamanii, &r.Ora, &r.NumeWODTemplate, &r.AntrenorID, &r.TipAntrenamentID)
-		reguli = append(reguli, r)
-	}
-
-	today := time.Now()
-	// Calculăm data următoarei zile de Luni
-	daysUntilNextMonday := (7 - int(today.Weekday()) + int(time.Monday)) % 7
-	if daysUntilNextMonday == 0 {
-		daysUntilNextMonday = 7
-	}
-	urmatorulLuni := today.AddDate(0, 0, daysUntilNextMonday)
-
-	claseGenerate := 0
-	tx, err := db.Begin()
-	if err != nil {
-		http.Error(w, "Eroare internă", http.StatusInternalServerError)
-		return
-	}
-
-	queryInsert := `INSERT INTO CLASE (ClasaID, NumeWOD, DescriereWOD, DataOra, AntrenorID, TipAntrenamentID)
-					VALUES (CLASE_SEQ.NEXTVAL, :1, :2, TO_TIMESTAMP(:3, 'YYYY-MM-DD"T"HH24:MI'), :4, :5)`
-
-	for _, regula := range reguli {
-		dataClasei := urmatorulLuni.AddDate(0, 0, regula.ZiuaSaptamanii-1)
-		dataOraString := fmt.Sprintf("%sT%s", dataClasei.Format("2006-01-02"), regula.Ora)
-
-		_, err := tx.Exec(queryInsert, regula.NumeWODTemplate, sql.NullString{}, dataOraString, regula.AntrenorID, regula.TipAntrenamentID)
-		if err != nil {
-			tx.Rollback()
-			http.Error(w, "Eroare la generare (posibil duplicat)", http.StatusInternalServerError)
-			return
-		}
-		claseGenerate++
-	}
-
-	if err := tx.Commit(); err != nil {
-		http.Error(w, "Eroare la commit", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{"mesaj": "Orarul a fost generat!", "claseGenerate": claseGenerate})
-}
 
 // =================================================================================
 // HANDLERE PENTRU MENTORAT
@@ -1877,25 +1658,23 @@ func handlerRaportVizualizare(w http.ResponseWriter, _ *http.Request) {
 }
 
 func handlerRaportComplex(w http.ResponseWriter, _ *http.Request) {
-	// Interogare Complexă: JOIN pe 5 tabele + Filtrare flexibilă
+	// Interogare Complexă: JOIN pe 4 tabele (Cerința III.c) + Filtrare pe 2 condiții
 	query := `
 		SELECT
 			m.Nume AS Nume_Membru,
 			m.Prenume AS Prenume_Membru,
-			c.NumeWOD AS NumeClasa,
+			'Mentorat Personal' AS NumeClasa,
 			a.Nume AS Nume_Antrenor
 		FROM
 			MEMBRI m
 		JOIN
 			ABONAMENTE ab ON m.AbonamentID = ab.AbonamentID
 		JOIN
-			INSCRIERI i ON m.MembruID = i.MembruID
+			MENTORAT men ON m.MembruID = men.MembruID
 		JOIN
-			CLASE c ON i.ClasaID = c.ClasaID
-		JOIN
-			ANTRENORI a ON c.AntrenorID = a.AntrenorID
+			ANTRENORI a ON men.AntrenorID = a.AntrenorID
 		WHERE
-			(UPPER(ab.TipAbonament) LIKE '%NELIMITAT%' OR UPPER(ab.TipAbonament) LIKE '%FULL%')
+			(UPPER(ab.TipAbonament) LIKE '%NELIMITAT%' OR ab.Pret >= 250)
 			AND UPPER(a.Nume) LIKE '%POPESCU%'
 	`
 	rows, err := db.Query(query)

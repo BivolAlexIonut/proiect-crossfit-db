@@ -1,4 +1,4 @@
--- STERGE DATELE EXISTENTE (pentru a evita duplicate la rulari multiple)
+
 DELETE FROM ACHIZITII;
 DELETE FROM PARTICIPARI_COMPETITIE;
 DELETE FROM INSCRIERI;
@@ -13,7 +13,7 @@ DELETE FROM TIPURI_ANTRENAMENT;
 DELETE FROM ANTRENORI;
 DELETE FROM ABONAMENTE;
 
--- 1. POPULARE ABONAMENTE
+--1. POPULARE ABONAMENTE
 INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (1, 'Standard Crossfit', 250);
 INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (2, 'Student Crossfit', 150);
 INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (3, 'Open Gym', 200);
@@ -21,7 +21,7 @@ INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (4, 'Premium All
 INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (5, 'Full Time', 350);
 INSERT INTO ABONAMENTE (AbonamentID, TipAbonament, Pret) VALUES (6, 'Weekend Only', 120);
 
--- 2. POPULARE ANTRENORI
+--2. POPULARE ANTRENORI
 INSERT INTO ANTRENORI (AntrenorID, Nume, Prenume, Specializare) VALUES (1, 'Popescu', 'Ion', 'Crossfit L2');
 INSERT INTO ANTRENORI (AntrenorID, Nume, Prenume, Specializare) VALUES (2, 'Ionescu', 'Maria', 'Gimnastica');
 INSERT INTO ANTRENORI (AntrenorID, Nume, Prenume, Specializare) VALUES (3, 'Vasilescu', 'Andrei', 'Haltere');
@@ -75,7 +75,7 @@ INSERT INTO TIPURI_ANTRENAMENT (TipID, NumeWOD, Descriere) VALUES (4, 'Cindy', '
 INSERT INTO TIPURI_ANTRENAMENT (TipID, NumeWOD, Descriere) VALUES (5, 'Helen', '3 runde: Alergare 400m, 21 Kettlebell Swings, 12 Tractiuni.');
 INSERT INTO TIPURI_ANTRENAMENT (TipID, NumeWOD, Descriere) VALUES (6, 'Linda', '10-9-8-7-6-5-4-3-2-1 repetari de Deadlift, Bench Press, Clean.');
 
--- 6. POPULARE CLASE (MODIFICAT: Fara nume/descriere redundante)
+-- 6. POPULARE CLASE
 INSERT INTO CLASE (ClasaID, AntrenorID, TipID, DataOra) VALUES (1, 1, 1, TO_DATE('2024-02-10 08:00', 'YYYY-MM-DD HH24:MI'));
 INSERT INTO CLASE (ClasaID, AntrenorID, TipID, DataOra) VALUES (2, 2, 2, TO_DATE('2024-02-10 09:30', 'YYYY-MM-DD HH24:MI'));
 INSERT INTO CLASE (ClasaID, AntrenorID, TipID, DataOra) VALUES (3, 3, 3, TO_DATE('2024-02-10 11:00', 'YYYY-MM-DD HH24:MI'));
